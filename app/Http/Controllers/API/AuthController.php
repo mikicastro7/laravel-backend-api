@@ -26,13 +26,17 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        
         $loginData = $request->validate([
             'name' => 'required',
             'password' => 'required'
         ]);
 
         if (!auth()->attempt($loginData)) {
-            return response(['message' => 'Invalid Credentials'], 401);
+            return response()->json([
+                'status' => 'error',
+                'message'    => 'Los datos són incorrectos',
+            ], 401);
         }
 
         $accessToken = auth()->user()->createToken('authToken')->accessToken;
