@@ -25,5 +25,5 @@ Route::post('/login', 'App\Http\Controllers\API\AuthController@login');
 Route::apiResource('/todo', 'App\Http\Controllers\API\todoController')->middleware('auth:api');
 Route::get('/userTodos', 'App\Http\Controllers\API\todoController@getTodosUser')->middleware('auth:api');
 Route::get('/projects', 'App\Http\Controllers\API\ProjectsController@getProjects');
-Route::apiResource('/comment', 'App\Http\Controllers\API\commentController')->middleware('auth:api');
-Route::get('/projectComments/{id}', 'App\Http\Controllers\API\commentController@getCommentsProject');
+Route::apiResource('/comment', 'App\Http\Controllers\API\CommentController')->middleware('auth:api');
+Route::get('/projectComments/{id}', 'App\Http\Controllers\API\CommentController@getCommentsProject');
