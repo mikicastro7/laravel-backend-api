@@ -13,6 +13,7 @@ use Auth;
 class CommentController extends Controller
 {
     public function store(Request $request){
+
         $data = $request->all();
         $data['user_id'] = Auth::user()->id;
 
@@ -22,18 +23,23 @@ class CommentController extends Controller
 
     public function update(Request $request, Comment $comment)
     {
-        $comment->comment_text = $request->comment_text;
-        $comment->rating = $request->rating;
-        
-        $comment->save();
+        if(Auth::user()->id == $comment->user_id){
+            $comment->comment_text = $request->comment_text;
+            $comment->rating = $request->rating;
+            
+            $comment->save();
+            return response([ 'comments' => new todoResource($comment), 'message' => 'Retrieved successfully'], 200);
+        }
 
-        return response([ 'comments' => new todoResource($comment), 'message' => 'Retrieved successfully'], 200);
+        return response(['message' => "User doesn't match"]);
     }
     public function destroy(comment $comment)
     {
-        $comment->delete();
-
-        return response(['message' => 'Deleted']);
+        if(Auth::user()->id == $comment->user_id){
+            $comment->delete();
+            return response(['message' => 'Deleted']);
+        }
+        return response(['message' => "User doesn't match"]);
     }
     public function getCommentsProject(Request $request){
         $comments = Comment::where('project_id', $request->id)->get();

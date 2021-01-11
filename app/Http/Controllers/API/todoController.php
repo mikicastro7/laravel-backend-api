@@ -53,16 +53,6 @@ class todoController extends Controller
         return response([ 'todo' => new todoResource($todo), 'message' => 'Created successfully'], 200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\todo  $todo
-     * @return \Illuminate\Http\Response
-     */
-    public function show(todo $todo)
-    {
-        return response([ 'todo' => new todoResource($todo), 'message' => 'Retrieved successfully'], 200);
-    }
 
     /**
      * Update the specified resource in storage.
@@ -73,9 +63,16 @@ class todoController extends Controller
      */
     public function update(Request $request, todo $todo)
     {
-        $todo->update($request->all());
-
-        return response([ 'todo' => new todoResource($todo), 'message' => 'Retrieved successfully'], 200);
+        if(Auth::user()->id == $todo->user_id){
+            $todo->title = $request->title;
+            $todo->description = $request->description;
+            $todo->completed = $request->completed;
+            $todo->priority = $request->priority;
+            
+            $todo->save();
+            return response([ 'comments' => new todoResource($comment), 'message' => 'Retrieved successfully'], 200);
+        }
+        return response(['message' => "User doesn't match"]);
     }
 
     /**
@@ -86,9 +83,11 @@ class todoController extends Controller
      */
     public function destroy(todo $todo)
     {
-        $todo->delete();
-
-        return response(['message' => 'Deleted']);
+        if(Auth::user()->id == $todo->user_id){
+            $todo->delete();
+            return response(['message' => 'Deleted']);
+        }
+        return response(['message' => "User doesn't match"]);
     }
     public function getTodosUser(Request $request){
         
