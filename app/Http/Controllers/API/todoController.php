@@ -66,11 +66,11 @@ class todoController extends Controller
         if(Auth::user()->id == $todo->user_id){
             $todo->title = $request->title;
             $todo->description = $request->description;
-            $todo->completed = $request->completed;
+            $todo->completed = $request->completed === 'true'? true: false;
             $todo->priority = $request->priority;
             
             $todo->save();
-            return response([ 'comments' => new todoResource($comment), 'message' => 'Retrieved successfully'], 200);
+            return response([ 'todo' => new todoResource($todo), 'message' => 'Retrieved successfully'], 200);
         }
         return response(['message' => "User doesn't match"]);
     }
