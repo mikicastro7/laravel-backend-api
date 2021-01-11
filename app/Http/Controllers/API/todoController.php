@@ -66,7 +66,7 @@ class todoController extends Controller
         if(Auth::user()->id == $todo->user_id){
             $todo->title = $request->title;
             $todo->description = $request->description;
-            $todo->completed = $request->completed === 'true'? true: false;
+            $todo->completed = $request->completed === true ? true: false;
             $todo->priority = $request->priority;
             
             $todo->save();
