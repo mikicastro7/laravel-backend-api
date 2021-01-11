@@ -52,7 +52,10 @@ class todoController extends Controller
 
         return response([ 'todo' => new todoResource($todo), 'message' => 'Created successfully'], 200);
     }
-
+    public function show(todo $todo)
+    {
+        return response([ 'todo' => new todoResource($todo), 'message' => 'Retrieved successfully'], 200);
+    }
 
     /**
      * Update the specified resource in storage.
