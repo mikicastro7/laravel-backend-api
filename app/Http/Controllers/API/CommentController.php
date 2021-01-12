@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\todoResource;
 use Illuminate\Support\Facades\Validator;
@@ -42,7 +43,11 @@ class CommentController extends Controller
         return response(['message' => "User doesn't match"]);
     }
     public function getCommentsProject(Request $request){
-        $comments = Comment::where('project_id', $request->id)->get();
+        $comments = Comment::where('project_id', $request->id)
+            ->join('users', 'users.id', '=', 'comments.user_id')
+            ->select('users.name', 'comments.*')
+        ->get();
+        
         return response([ 'comments' => $comments, 'message' => 'Retrieved successfully'], 200);
     }
 }
