@@ -45,8 +45,9 @@ class CommentController extends Controller
     public function getCommentsProject(Request $request){
         $comments = Comment::where('project_id', $request->id)
             ->join('users', 'users.id', '=', 'comments.user_id')
-            ->select('users.name', 'comments.*')
-        ->get();
+            ->select('users.name', 'comments.*')        
+            ->orderByRaw('FIELD(users.id, ?) DESC, comments.created_at DESC', [Auth::user()->id])
+            ->get();
         
         return response([ 'comments' => $comments, 'message' => 'Retrieved successfully'], 200);
     }
